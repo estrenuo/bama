@@ -74,6 +74,13 @@ Empty pages only show empty states. The template's
 short titles, dates in the past and future, every priority and status, and
 only what a person can create in the app.
 
+Snapshots get shared. Pages that show the user's own files, contacts or
+clipboard show sample data from /tmp in snapshot mode, never the real home
+folder. Swap only that source, so a new source needs no snapshot change.
+Check search quality the other way round: run a new search against your
+own home folder once, because the noise (caches, compiled files,
+~/Library) lives there and not in the sample files.
+
 ### Screen Recording permission
 
 Snapshots use `screencapture -l <window>`, which shows glass, sidebars, and
