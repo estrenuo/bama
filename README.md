@@ -18,14 +18,17 @@ Swift and SwiftUI. Local data. No Xcode GUI.
 [![Codex plugin](https://img.shields.io/badge/Codex-plugin-10A37F?style=flat-square)](#install)
 [![MIT license](https://img.shields.io/badge/license-MIT-F4C430?style=flat-square)](LICENSE)
 
-**[Quick start](#quick-start) · [How it works](#how-it-works) · [Skills](#skills) · [Specs](#specs) · [Install](#install)**
+**[Quick start](#quick-start) · [How it works](#how-it-works) · [Skills](#skills) · [Specs](#specs) · [Install](#install) · [This fork](#this-fork)**
 
 </div>
+
+> [!NOTE]
+> This is a fork of [daveebbelaar/bama](https://github.com/daveebbelaar/bama) with lessons from building a real app with it. The install commands below install this fork. See [This fork](#this-fork) for what is different.
 
 ## Quick start
 
 ```bash
-npx skills@latest add daveebbelaar/bama
+npx skills@latest add estrenuo/bama
 ```
 
 Then ask your agent:
@@ -76,7 +79,7 @@ It builds one story per commit. Before each commit it snapshots every page in li
 <tr><td nowrap><a href="skills/plan/clone/SKILL.md"><samp>clone</samp></a></td><td>Screenshots every screen of any app with computer use or a browser, writes a screen index</td></tr>
 <tr><td nowrap><a href="skills/plan/user-stories/SKILL.md"><samp>user-stories</samp></a></td><td>A backlog with checkable acceptance criteria, in milestones</td></tr>
 <tr><td rowspan="5" valign="top"><b>Code</b></td><td nowrap><a href="skills/code/swift-swiftui/SKILL.md"><samp>swift-swiftui</samp></a></td><td>Swift 6 concurrency, state, SwiftData, AppKit bridges, compiler errors</td></tr>
-<tr><td nowrap><a href="skills/code/os-integrations/SKILL.md"><samp>os-integrations</samp></a></td><td>Global hotkeys, menu bar, floating panels, window control, screen capture, Shortcuts, URL schemes, CLI, permissions</td></tr>
+<tr><td nowrap><a href="skills/code/os-integrations/SKILL.md"><samp>os-integrations</samp></a></td><td>Global hotkeys, menu bar, floating panels, window control, screen capture, clipboard, synced folders, Shortcuts, URL schemes, CLI, permissions</td></tr>
 <tr><td nowrap><a href="skills/code/performance/SKILL.md"><samp>performance</samp></a></td><td>Measure, then fix: main thread, GPU compositing, images, Instruments from the command line</td></tr>
 <tr><td nowrap><a href="skills/code/improve-architecture/SKILL.md"><samp>improve-architecture</samp></a></td><td>Finds hot spots as the app grows and refactors one step per commit, with behavior proven unchanged</td></tr>
 <tr><td nowrap><a href="skills/code/agent-cli/SKILL.md"><samp>agent-cli</samp></a></td><td>Optional: a command line and MCP server, so Claude Code, Codex, and scripts can drive your app</td></tr>
@@ -88,7 +91,7 @@ It builds one story per commit. Before each commit it snapshots every page in li
 <tr><td nowrap><a href="skills/design/design-from-app/SKILL.md"><samp>design-from-app</samp></a></td><td>Rebuilds the look of an app you like from its screenshots: measures sizes, type, and colors, then compares pixel by pixel until it matches</td></tr>
 <tr><td nowrap><a href="skills/design/app-icon/SKILL.md"><samp>app-icon</samp></a></td><td>A Liquid Glass icon written as an Icon Composer file, checked in every look</td></tr>
 <tr><td rowspan="3" valign="top"><b>Ship</b></td><td nowrap><a href="skills/ship/build-and-verify/SKILL.md"><samp>build-and-verify</samp></a></td><td>Build, install, snapshot every page in light and dark, look at them</td></tr>
-<tr><td nowrap><a href="skills/ship/test-mac-app/SKILL.md"><samp>test-mac-app</samp></a></td><td>Swift Testing, an in-app self-test, a debug bridge an agent can drive</td></tr>
+<tr><td nowrap><a href="skills/ship/test-mac-app/SKILL.md"><samp>test-mac-app</samp></a></td><td>Swift Testing, an in-app self-test in groups, real key events, focus checks that tell a bug from a sleeping display, a debug bridge an agent can drive</td></tr>
 <tr><td nowrap><a href="skills/ship/improve-loop/SKILL.md"><samp>improve-loop</samp></a></td><td>Works through the backlog one story per commit until a milestone is done</td></tr>
 </table>
 
@@ -108,7 +111,7 @@ Pick one route per agent. Two routes install every skill twice.
 <summary><b>Claude Code</b></summary>
 
 ```text
-/plugin marketplace add daveebbelaar/bama
+/plugin marketplace add estrenuo/bama
 /plugin install bama@bama
 ```
 
@@ -118,7 +121,7 @@ Pick one route per agent. Two routes install every skill twice.
 <summary><b>Codex</b></summary>
 
 ```bash
-codex plugin marketplace add daveebbelaar/bama
+codex plugin marketplace add estrenuo/bama
 codex plugin add bama@bama
 ```
 
@@ -130,8 +133,8 @@ codex plugin add bama@bama
 Uses [skills.sh](https://skills.sh). Install all skills, or one with `--skill`.
 
 ```bash
-npx skills@latest add daveebbelaar/bama -a <agent>
-npx skills@latest add daveebbelaar/bama --skill=clone
+npx skills@latest add estrenuo/bama -a <agent>
+npx skills@latest add estrenuo/bama --skill=clone
 ```
 
 </details>
@@ -140,11 +143,30 @@ npx skills@latest add daveebbelaar/bama --skill=clone
 <summary><b>By hand</b></summary>
 
 ```bash
-git clone https://github.com/daveebbelaar/bama.git
+git clone https://github.com/estrenuo/bama.git
 bama/scripts/link-skills.sh       # links every skill into ~/.claude/skills and ~/.agents/skills
 ```
 
 </details>
+
+## This fork
+
+Everything upstream has, plus what building [Reach](https://github.com/estrenuo/Reach), a launcher app, taught. Most rules come from a bug that was found and fixed there.
+
+- **Template self-test**: checks run in named groups (`tools/selftest.sh search` runs one), a run that hangs is stopped after 300 s, and the display stays awake. A failed run says when the display slept, the screen locked, or another app came to the front.
+- **Template `CLAUDE.md`**: how often to run what. Unit tests and build per commit, the full self-test once before a PR, snapshots only for UI changes.
+- **`mac-design`**: a menu bar icon people can hide uses `NSStatusItem`. `MenuBarExtra(isInserted:)` bound to a setting hung the app at launch.
+- **`test-mac-app`**: key events carry the flags a real keyboard sends, typing is tested by typing, and a section on focus checks and flaky runs.
+- **`swift-swiftui`**: pitfalls with `.defaultAppStorage`, lists per sidebar page, state outside the Scene body, `@FocusState` in panels, and a second `ModelContainer`.
+- **`os-integrations`**: bringing a window forward from an agent app, borrowing the clipboard without leaking passwords, and trashing files in OneDrive or iCloud folders.
+- **`build-and-verify`**: sample data in snapshots that get shared.
+
+Fixes to upstream advice also go back to daveebbelaar/bama as pull requests ([#8](https://github.com/daveebbelaar/bama/pull/8)). To pull in new upstream work:
+
+```bash
+git remote add upstream https://github.com/daveebbelaar/bama.git   # once
+git fetch upstream && git merge upstream/main
+```
 
 ## Requirements
 
