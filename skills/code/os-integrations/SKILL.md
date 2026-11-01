@@ -29,7 +29,7 @@ Code for every row is in [recipes.md](recipes.md).
 | Screenshot | ScreenCaptureKit `SCScreenshotManager` | Screen Recording |
 | Window thumbnails | `SCScreenshotManager` with an `SCContentFilter` per window | Screen Recording |
 | Screen recording to MP4 | `SCStream` + `SCRecordingOutput` (`AVAssetWriter` when you edit frames) | Screen Recording, Microphone |
-| Clipboard history | Poll `NSPasteboard.general.changeCount` | None |
+| Clipboard history | Poll `NSPasteboard.general.changeCount`; skip and never restore Concealed or Transient copies (recipes.md, Borrow the clipboard) | None |
 | Text in images | Vision `RecognizeTextRequest` | None |
 | Launch at login | `SMAppService.mainApp.register()` | User approves once |
 | Links from scripts, Stream Deck, Raycast | `CFBundleURLTypes` + `.onOpenURL` | None |

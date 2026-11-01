@@ -48,6 +48,23 @@ on the main actor unless you say otherwise. UI code needs no annotations.
 - `ForEach(items)` over values, never `ForEach($items)` for data the user
   can delete: a row can read an index that no longer exists and crash. Get
   a binding by looking the item up by id.
+- Hand a custom `UserDefaults` store to the property that uses it
+  (`@AppStorage("key", store: Store.settings)`), never with
+  `.defaultAppStorage` on a whole scene. On a scene it made every snapshot
+  of that window fall back to a blank copy.
+- A `List` that shows a different set per sidebar page gets
+  `.id(page)`. Without it the one table reshapes while the selection and
+  title change in the same update, and AppKit logs "reentrant operation in
+  its NSTableView delegate".
+- Anything that must change while the app runs (a menu bar icon that can
+  be hidden, a window that comes and goes) lives outside the App's Scene
+  body. The Scene body does not run again when an `@Observable` or
+  `@AppStorage` value changes. See "A menu bar icon people can hide" in
+  [../../design/mac-design/patterns.md](../../design/mac-design/patterns.md).
+- `@FocusState` set in `.onAppear` is lost when the view sits in a panel or
+  popover that is not in its window yet. Set it one run loop tick later
+  (`DispatchQueue.main.async`), then put the cursor after the text, since
+  focusing a field later selects all of it.
 
 ## SwiftData
 
@@ -56,6 +73,10 @@ on the main actor unless you say otherwise. UI code needs no annotations.
 - Every new property has a default value, so existing stores still open.
 - Store at `~/Library/Application Support/<AppName>/`. Allow an override
   (`APP_STORE`) so tests never touch the real data.
+- Open the store only through one function with the one list of models
+  (`Store.makeContainer()` in the template). A second `ModelContainer`
+  with fewer models, in a test or an old build, migrates the store and
+  drops the tables it does not list.
 - Give every model its own `uid: UUID`. `persistentModelID` changes on the
   first save, so it breaks selection and lookups.
 - Undo: register the reverse of each action on the window's undo manager.

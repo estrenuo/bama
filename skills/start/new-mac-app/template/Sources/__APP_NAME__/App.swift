@@ -76,6 +76,9 @@ enum Store {
         return dir.appending(path: "__APP_NAME__.store")
     }
 
+    /// The one way to open the store, with the one list of models. A second
+    /// ModelContainer with fewer models migrates the store and drops the tables
+    /// it does not list. A new @Model goes into this list.
     static func makeContainer() -> ModelContainer {
         do {
             return try ModelContainer(for: Item.self, configurations: ModelConfiguration(url: url))

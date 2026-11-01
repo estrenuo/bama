@@ -149,6 +149,52 @@ after touching commands.
   seeded run. Seed data only fills an empty store.
 - Print line-buffered (`setvbuf(stdout, nil, _IOLBF, 0)`), so a crash
   keeps the PASS lines before it.
+- Kill a run that hangs. The template's `tools/selftest.sh` stops the app
+  after 300 s and prints `SELFTEST HUNG`. A scene update loop once ran a
+  self-test for 20 minutes at 99% CPU without a line of output.
+- After a hide followed by a show, wait before typing again. Hide, show
+  and a new query in one run loop turn tripped an AppKit assertion in the
+  field editor. A person cannot do that; a check that does it crashes.
+
+### Group the checks
+
+The template's self-test runs its checks in named groups
+(`SelfTest.groups`). `tools/selftest.sh search,basics` runs only those, for
+quick feedback on the part you changed; a wrong name prints the list. Give
+each group its own file (`SelfTest+Search.swift`) before the main file
+passes a few hundred lines. Run the full self-test once before a PR, not
+after every commit.
+
+### Focus checks and flaky runs
+
+Checks that need a window with the keyboard fail for reasons outside the
+code. Rule those out before calling a failure a bug, and rule out a bug
+before calling a failure flaky.
+
+- The template keeps the display awake during a run and prints a `NOTE`
+  when the display slept, the screen locked, or another app came to the
+  front. With the display asleep, no window can take the keyboard: one
+  app failed the same 17 checks twice in a row while the code was fine.
+  Check `pmset -g log | grep "Display is turned"` for the time of the run.
+- Never accept "another app took focus" as the explanation before a run
+  with no one at the Mac. In one launcher most of those failures were a
+  real bug that only showed with another app in front.
+- Test system hooks (global hotkeys, panels, Quick Look) with another app in
+  front and real events posted through the system (`CGEvent`), since that is
+  how people use a utility. A check that calls the handler while the app
+  is active passes code that fails in real use.
+- A window that makes itself key (Quick Look, an alert) also moves the
+  keyboard when it leaves. Cover both ends.
+- Run a focus check five times before calling it stable.
+- When a close or hide can race an animation, retry until the window is
+  really gone, and add a check that hits the race on purpose.
+- When a change to timing code makes a flaky check fail every time, run the
+  old code again on the same Mac before trying a third idea, and revert.
+- Log every user action with its error to a subsystem, so a failure on the
+  user's Mac can be read back. In zsh, `log` is a builtin; use
+  `/usr/bin/log show --last 10m --info --predicate 'subsystem == "<bundle id>"'`.
+- List the checks that are known to flake in the app's `CLAUDE.md`, with
+  why. Agents report them instead of re-running in a loop.
 
 ## 3. Debug bridge
 
