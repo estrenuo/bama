@@ -31,7 +31,7 @@ Rules and reasons: [rules.md](rules.md).
 
 ## 1. List the commands
 
-Read the user stories (`docs/stories/`). Write each thing a person does as
+Read the user stories (`docs/STORIES.md`). Write each thing a person does as
 a command, `<noun> <verb>`, and mark it:
 
 - **read**: `items list`, `items show`, `status`. Safe to run any time.
