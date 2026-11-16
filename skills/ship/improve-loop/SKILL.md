@@ -69,8 +69,8 @@ Snapshot only the pages a story touches (`APP_SNAPSHOT_PAGES`), and the
 full set at the end of each milestone.
 
 Fix, rebuild, and compare again. Three rounds per story at most. If it still
-does not match, set the story to `todo` again with a note that says what is
-blocking, and move on.
+does not match, set the story to `todo` again and move on. `Status:` holds
+only the value, so what is blocking goes in the report (step 7).
 
 ## 6. Commit and record
 
@@ -79,7 +79,8 @@ git add -A
 git commit -m "Complete tasks with Command-Return"
 ```
 
-Set the story to `done` in `docs/STORIES.md` and commit that with the code.
+Set the story to `done` in `docs/STORIES.md`, update the overview table,
+and commit that with the code.
 One story per commit, so any story can be reverted on its own. M1 may
 land as one commit when its stories share one skeleton (model, pages,
 list, persistence); from M2 on, one story per commit.

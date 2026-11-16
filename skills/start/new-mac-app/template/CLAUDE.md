@@ -56,6 +56,13 @@ The bama plugin has a skill for each step: `mac-design` (design rules),
 `swift-swiftui`, `os-integrations`, `performance`, `build-and-verify`,
 `test-mac-app`, `app-icon`, `user-stories`, and `improve-loop`. Use them.
 
+## Stories
+
+- `docs/STORIES.md` is the only place for what has to be built and how far it is. There is no TODO or backlog file next to it; a PRD says what is wanted, never the status.
+- Status follows `main`: `done` means the code is on `main`, `doing` means part of it is built or it sits on an unmerged branch, `todo` means nothing is built.
+- Change `Status:` in the same commit as the code.
+- A new wish or bug first gets a story or an acceptance line, then gets built.
+
 ## Git
 
 - Commit after each working change, with a message that says what the user can now do.
